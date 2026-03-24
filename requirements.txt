@@ -13,3 +13,7 @@ rasterio
 gdal
 pyrosar
 asf-search
+
+boto3
+requests
+os
