@@ -209,3 +209,5 @@ __marimo__/
 # Dados e outputs locais (arquivos pesados)
 data/
 outputs/
+*.tif
+*.png

@@ -1,19 +1,10 @@
-# general image processing libraries
 numpy
 matplotlib
 opencv-python
 scikit-image
 scipy
-mahotas
 Pillow
-SimpleITK
-
-# SAR image processing libraries
 rasterio
-gdal
-pyrosar
 asf-search
-
 boto3
 requests
-os
