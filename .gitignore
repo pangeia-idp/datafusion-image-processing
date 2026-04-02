@@ -208,8 +208,7 @@ __marimo__/
 
 # Dados e outputs locais (arquivos pesados)
 data/
-external/
-*.csv
-outputs/
+outputs/support/
 *.tif
 *.png 
+*.csv

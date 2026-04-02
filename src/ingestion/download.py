@@ -90,6 +90,47 @@ def baixar_amostra(n: int = 5):
     print("Download de teste concluído!")
     print(f"Arquivos salvos em: {destino}")
 
+def baixar_por_local(satelite: str = "capella-13", n: int = 10):
+    """Baixa n imagens do mesmo satélite para garantir pares."""
+    df = pd.read_csv(cfg["paths"]["csv_contest"])
+    
+    # Filtra pelo satélite/plataforma
+    df_filtrado = df[df["platform"] == satelite]
+    print(f"Imagens disponíveis para {satelite}: {len(df_filtrado)}")
+    
+    ids = df_filtrado["stac_id"].unique()[:n]
+    destino = cfg["paths"]["raw"]
+    
+    for i, stac_id in enumerate(ids):
+        print(f"\n[{i+1}/{len(ids)}] {stac_id}")
+        baixar_assets(stac_id, ["GEO", "SLC"], destino)
+
+# Adicione no final do download.py
+def baixar_geos_faltantes():
+    """Baixa as GEOs que foram detectadas mas não estão na pasta raw."""
+    
+    # Lista de stac_ids detectados que precisam de GEO
+    stac_ids = [
+        "CAPELLA_C02_SP_GEO_HH_20201231031006_20201231031030",
+        "CAPELLA_C02_SP_GEO_HH_20210629043240_20210629043306",
+        "CAPELLA_C10_SP_GEO_HH_20240509150102_20240509150132",
+        "CAPELLA_C13_SP_GEO_HH_20241112185032_20241112185042",
+        "CAPELLA_C03_SP_GEO_HH_20220107205605_20220107205621",
+        "CAPELLA_C13_SP_GEO_HH_20250508193043_20250508193052",
+        "CAPELLA_C13_SP_GEO_HH_20241113132634_20241113132642",
+        "CAPELLA_C13_SP_GEO_HH_20250730075534_20250730075603",
+        "CAPELLA_C13_SP_GEO_HH_20250110214529_20250110214532",
+        "CAPELLA_C13_SP_GEO_HH_20241211094727_20241211094738",
+        "CAPELLA_C13_SP_GEO_HH_20250830031430_20250830031509",
+    ]
+    
+    destino = cfg["paths"]["raw"]
+    print(f"Baixando {len(stac_ids)} GEOs faltantes...\n")
+    
+    for i, stac_id in enumerate(stac_ids):
+        print(f"[{i+1}/{len(stac_ids)}] {stac_id}")
+        baixar_assets(stac_id, ["GEO"], destino)
 
 if __name__ == "__main__":
-    baixar_amostra(n=5)  # mude para baixar mais ou menos
+    baixar_geos_faltantes()
+
