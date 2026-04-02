@@ -1,0 +1,7 @@
+arquivo,classe,tem_navio,confianca,margem,descricao,scores
+CAPELLA_C02_SP_GEO_HH_20201231031006_20201231031030.png,porto,True,0.8657,0.0611,Positivo: 0.866 | Negativo: 0.805 | Margem: 0.061,"{""porto"": 0.8657, ""costa"": 0.8325, ""mineracao"": 0.8046, ""urbano"": 0.7654, ""vulcao"": 0.7898}"
+CAPELLA_C02_SP_GEO_HH_20210629043240_20210629043306.png,porto,True,0.8961,0.0445,Positivo: 0.896 | Negativo: 0.852 | Margem: 0.044,"{""porto"": 0.8699, ""costa"": 0.8961, ""mineracao"": 0.8011, ""urbano"": 0.7894, ""vulcao"": 0.8516}"
+CAPELLA_C13_SP_SLC_HH_20250923192508_20250923192516.png,porto,False,0.8459,-0.0183,Positivo: 0.846 | Negativo: 0.864 | Margem: -0.018,"{""porto"": 0.8459, ""costa"": 0.8076, ""mineracao"": 0.8449, ""urbano"": 0.8642, ""vulcao"": 0.7845}"
+CAPELLA_C10_SP_GEO_HH_20240509150102_20240509150132.png,costa,True,0.9369,0.0786,Positivo: 0.937 | Negativo: 0.858 | Margem: 0.079,"{""porto"": 0.8583, ""costa"": 0.9369, ""mineracao"": 0.823, ""urbano"": 0.8246, ""vulcao"": 0.8583}"
+CAPELLA_C13_SP_GEO_HH_20241112185032_20241112185042.png,costa,True,0.9213,0.0386,Positivo: 0.921 | Negativo: 0.883 | Margem: 0.039,"{""porto"": 0.8123, ""costa"": 0.9213, ""mineracao"": 0.7966, ""urbano"": 0.7914, ""vulcao"": 0.8827}"
+CAPELLA_C03_SP_GEO_HH_20220107205605_20220107205621.png,costa,True,0.92,0.0779,Positivo: 0.920 | Negativo: 0.842 | Margem: 0.078,"{""porto"": 0.8656, ""costa"": 0.92, ""mineracao"": 0.8421, ""urbano"": 0.8245, ""vulcao"": 0.8396}"
