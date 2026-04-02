@@ -6,7 +6,7 @@ paths:
   raw: "data/raw/capella"
   processed: "data/processed"
   output: "output/figures"
-  reports: "output/reports"
+  csv_contest: "data/external/Capella_IEEE_DataContest_2026.csv"
 
 image:
   sensor: "Capella"
