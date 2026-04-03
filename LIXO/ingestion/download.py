@@ -125,9 +125,9 @@ def baixar_geos_prioritarias():
     print(f"GEOs faltantes: {len(faltantes)}")
     destino = cfg["paths"]["raw"]
     
-    for i, stac_id in enumerate(faltantes):
-        print(f"\n[{i+1}/{len(faltantes)}] {stac_id}")
-        baixar_assets(stac_id, ["GEO"], destino)
+    for i, stac_id in enumerate(faltantes):gg
+    print(f"\n[{i+1}/{len(faltantes)}] {stac_id}")
+    baixar_assets(stac_id, ["GEO"], destino)
 
 if __name__ == "__main__":
     baixar_geos_prioritarias()
