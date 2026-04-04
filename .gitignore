@@ -206,16 +206,17 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Dados e outputs locais (arquivos pesados)
-data/raw/
-data/processed/
-*.tif
+# Pastas de Imagens (Muito pesadas)
+dataset_ia/
+crops_final/
 *.png
+*.jpg
 
-# Permite CSVs importantes
-!data/external/*.csv
-!output/deteccoes/*.csv
+# Modelos Binários
+*.pkl
+*.pth
 
-# Oculta support (thumbnails pesados)
-output/support/
-output/recortes/
+# Python e Ambiente
+__pycache__/
+.venv/
+.ipynb_checkpoints/
