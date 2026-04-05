@@ -1,66 +1,57 @@
-import pandas as pd
+import os
+import matplotlib.pyplot as plt
 from fastai.vision.all import *
-import requests
-from io import BytesIO
-from tqdm import tqdm
 
-# 1. Carregar a IA (ajustado para o caminho que deu certo no seu PC)
-try:
-    learn = load_learner('models/meu_modelo_sar.pkl')
-    print("✅ Cérebro da IA carregado com sucesso!")
-except Exception as e:
-    print(f"❌ Erro ao carregar o modelo: {e}")
-    exit()
+# 1. Configurações de Caminho
+path = Path('dataset_local')
+model_dir = Path('models')
+model_dir.mkdir(exist_ok=True)
 
-df = pd.read_csv('teste.csv')
+# 2. Augmentation (Melhorado para evitar overfitting)
+batch_tfms = [
+    Rotate(max_deg=180, p=1.0),
+    Flip(p=0.5),
+    Brightness(max_lighting=0.3, p=0.7), # Variabilidade de luz evita que decore brilho fixo
+    Contrast(max_lighting=0.3, p=0.7),
+    Zoom(max_zoom=1.1, p=0.5)
+]
 
-# 2. Lógica de URL (Removendo zeros à esquerda para o S3 da Capella)
-def construir_url_correta(stac_id):
-    try:
-        partes = stac_id.split('_')
-        data_str = partes[-2] # Ex: '20240527001929'
-        
-        year = data_str[:4]
-        month = str(int(data_str[4:6])) # '05' -> '5'
-        day = str(int(data_str[6:8]))   # '27' -> '27'
-        
-        return f"https://capella-open-data.s3.amazonaws.com/data/{year}/{month}/{day}/{stac_id}/{stac_id}_thumb.png"
-    except:
-        return None
+# 3. DataLoaders (Aumento do Batch Size para estabilizar o gradiente)
+dls = ImageDataLoaders.from_folder(
+    path,
+    valid_pct=0.2,
+    seed=42, # Semente fixa garante reprodutibilidade (bom para pesquisa!)
+    item_tfms=Resize(224),
+    batch_tfms=batch_tfms,
+    bs=16
+)
 
-def predizer_ia_seguro(url):
-    if not url: return "Erro_URL", 0.0
-    try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        r = requests.get(url, headers=headers, timeout=10)
-        if r.status_code != 200:
-            return "Nao_Disponivel", 0.0
-        
-        img = PILImage.create(BytesIO(r.content))
-        classe, _, probs = learn.predict(img)
-        return classe, probs.max().item()
-    except:
-        return "Erro_Download", 0.0
+# 4. Criando o Modelo com Regularização (resnet18)
+# wd (weight decay) ajuda a evitar overfitting
+learn = vision_learner(dls, resnet18, metrics=accuracy, wd=0.1)
 
-# 3. Execução com Barra de Progresso
-print(f"🚀 Analisando {len(df)} imagens de satélite...")
+# 5. Treino Inteligente
+print("🧠 Iniciando aprendizado profundo com controle de Fitting...")
 
-# Criar a coluna de URL
-df['url_ia'] = df['stac_id'].apply(construir_url_correta)
+# Adicionamos o EarlyStoppingCallback: 
+# Se o modelo não melhorar por 3 épocas seguidas, ele para sozinho.
+cbs = [EarlyStoppingCallback(monitor='valid_loss', min_delta=0.01, patience=3)]
 
-# Inicializa as colunas novas
-ia_classes = []
-ia_confiancas = []
+# learn.fine_tune gerencia automaticamente o congelamento/descongelamento da rede
+# para evitar que ela "esqueça" o que já sabe (combate underfitting inicial)
+learn.fine_tune(15, cbs=cbs)
 
-# Loop com barra de progresso
-for url in tqdm(df['url_ia'], desc="Processando"):
-    res_classe, res_conf = predizer_ia_seguro(url)
-    ia_classes.append(res_classe)
-    ia_confiancas.append(res_conf)
+# 6. Salvamento Robusto do Modelo
+export_path = model_dir/'meu_modelo_sar_v2.pkl'
+learn.export(export_path)
+print(f"✅ Modelo salvo em: {export_path}")
 
-df['ia_super_classe'] = ia_classes
-df['ia_confianca'] = ia_confiancas
+# 7. Geração e Salvamento da Matriz de Confusão
+print("📊 Gerando e salvando Matriz de Confusão...")
+interp = ClassificationInterpretation.from_learner(learn)
+interp.plot_confusion_matrix()
 
-# 4. Salvar o resultado
-df.to_csv('resultado_pesquisa_idp.csv', index=False)
-print("\n✅ Finalizado! O arquivo 'resultado_pesquisa_idp.csv' está pronto.")
+# OBRIGATÓRIO PARA TERMINAL: Salvar antes de fechar o script
+plt.savefig('matriz_confusao_final.png')
+plt.close() # Limpa a memória do gráfico
+print("✅ Gráfico salvo como 'matriz_confusao_final.png' na raiz do projeto.")
