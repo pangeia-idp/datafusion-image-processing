@@ -211,6 +211,7 @@ dataset_ia/
 crops_final/
 dataset_local/
 data/
+ignorar/
 
 *.png
 *.jpg
@@ -223,3 +224,4 @@ data/
 __pycache__/
 .venv/
 .ipynb_checkpoints/
+
