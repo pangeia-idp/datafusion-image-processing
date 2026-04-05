@@ -208,11 +208,12 @@ __marimo__/
 
 # Pastas de Imagens (Muito pesadas)
 dataset_ia/
-crops_final/
+crop_img/
 dataset_local/
 data/
 ignorar/
-
+provas_visuais/
+labels/
 *.png
 *.jpg
 
