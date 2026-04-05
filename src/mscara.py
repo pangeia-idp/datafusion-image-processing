@@ -6,7 +6,7 @@ import csv
 
 # --- CONFIGURAÇÕES ---
 MODELO = 'dataset_local/models/meu_modelo_sar_v2.pkl'
-IMG_CAMINHO = 'dataset_local/costa/img2.png'
+IMG_CAMINHO = 'dataset_local/costa/img10.png'
 PASTA_PROVAS = 'provas_visuais'
 
 os.makedirs(PASTA_PROVAS, exist_ok=True)
