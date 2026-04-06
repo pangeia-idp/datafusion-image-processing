@@ -135,7 +135,7 @@ def salvar_resultado(t1: torch.Tensor, t2: torch.Tensor,
     axes[2].axis("off")
     plt.colorbar(im, ax=axes[2], fraction=0.046, pad=0.04)
 
-    plt.suptitle("UnifiedSiameseUNet — Mineração SAR", fontsize=11)
+    plt.suptitle("Log-Ratio Change Detection — Mineração SAR", fontsize=11)
     plt.tight_layout()
     plt.savefig(saida, dpi=150)
     print(f"Salvo em: {saida}")
@@ -160,16 +160,11 @@ if __name__ == "__main__":
     t2 = carregar_imagem(path_t2)
     print(f"Shape entrada: {t1.shape}")
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Dispositivo: {device}")
-
-    modelo = UnifiedSiameseUNet(in_channels=1, num_classes=1).to(device)
-    modelo.eval()
-
-    with torch.no_grad():
-        mapa = modelo(t1.to(device), t2.to(device))
-
-    mapa_cpu = mapa.cpu()
+    mapa_cpu = torch.abs(torch.log10(t1 + 1e-10) - torch.log10(t2 + 1e-10))
+    mascara = (t1 > 0.01) & (t2 > 0.01)
+    mapa_valido = mapa_cpu[mascara]
+    mapa_cpu = (mapa_cpu - mapa_valido.min()) / (mapa_valido.max() - mapa_valido.min() + 1e-8)
+    mapa_cpu = mapa_cpu.clamp(0, 1)
     print(f"Shape saída: {mapa_cpu.shape}")
     print(f"Prob. mín: {mapa_cpu.min():.4f} | máx: {mapa_cpu.max():.4f} | média: {mapa_cpu.mean():.4f}")
 

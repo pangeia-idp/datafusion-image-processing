@@ -113,7 +113,13 @@ def recortar_de_thumbnail(
 
     # Dimensões da imagem original via STAC (proj:shape = [linhas, colunas])
     orig_rows, orig_cols = stac["properties"]["proj:shape"]
-    geo_url = stac["assets"]["HH"]["href"]
+    geo_asset = next(
+        (v for v in stac["assets"].values() if v.get("type") == "image/tiff; application=geotiff"),
+        None
+    )
+    if geo_asset is None:
+        raise ValueError(f"Nenhum asset GeoTIFF encontrado para {stac_id}")
+    geo_url = geo_asset["href"]
 
     # Dimensões da thumbnail — lidas diretamente do arquivo PNG
     thumb_url = stac["assets"]["thumbnail"]["href"]
