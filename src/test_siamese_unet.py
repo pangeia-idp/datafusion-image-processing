@@ -1,13 +1,17 @@
 """
 test_siamese_unet.py
 
-Testa o UnifiedSiameseUNet com 2 thumbnails SAR de mineração:
-  - T1: CAPELLA_C13_SP_GEO_HH_20241106140935 (Nov 6)
-  - T2: CAPELLA_C13_SP_GEO_HH_20241123120750 (Nov 23)
+Log-ratio baseline using the UnifiedSiameseUNet architecture on 2 SAR thumbnails
+from the mining AOI (Newman, Western Australia):
+  - T1: CAPELLA_C13_SP_GEO_HH_20241123120750 (Nov 23)
+  - T2: CAPELLA_C13_SP_GEO_HH_20241126110432 (Nov 26)
 
-Uso:
+The UNet architecture is preserved for future training; the __main__ block
+currently computes a normalized log-ratio as a baseline change map.
+
+Usage:
     cd data-fusion-image-processing
-    python src/test_siamese_unet.py
+    python src/change_detection_baseline.py
 """
 
 import torch
@@ -116,29 +120,29 @@ def carregar_imagem(path: Path) -> torch.Tensor:
     return torch.from_numpy(arr).unsqueeze(0).unsqueeze(0)  # (1,1,H,W)
 
 
-def salvar_resultado(t1: torch.Tensor, t2: torch.Tensor,
-                     mapa: torch.Tensor, nome_t1: str, nome_t2: str,
-                     saida: Path):
-    """Plota T1, T2 e mapa de mudança lado a lado."""
+def save_result(t1: torch.Tensor, t2: torch.Tensor,
+                change_map: torch.Tensor, name_t1: str, name_t2: str,
+                output_path: Path):
+    """Plots T1, T2 and change map side by side."""
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
     axes[0].imshow(t1.squeeze().numpy(), cmap="gray")
-    axes[0].set_title(f"T1 — {nome_t1[:30]}", fontsize=8)
+    axes[0].set_title(f"T1 — {name_t1[:30]}", fontsize=8)
     axes[0].axis("off")
 
     axes[1].imshow(t2.squeeze().numpy(), cmap="gray")
-    axes[1].set_title(f"T2 — {nome_t2[:30]}", fontsize=8)
+    axes[1].set_title(f"T2 — {name_t2[:30]}", fontsize=8)
     axes[1].axis("off")
 
-    im = axes[2].imshow(mapa.squeeze().numpy(), cmap="hot", vmin=0, vmax=1)
-    axes[2].set_title("Mapa de Mudança (prob.)", fontsize=8)
+    im = axes[2].imshow(change_map.squeeze().numpy(), cmap="hot", vmin=0, vmax=1)
+    axes[2].set_title("Change Map (probability)", fontsize=8)
     axes[2].axis("off")
     plt.colorbar(im, ax=axes[2], fraction=0.046, pad=0.04)
 
-    plt.suptitle("Log-Ratio Change Detection — Mineração SAR", fontsize=11)
+    plt.suptitle("Log-Ratio Change Detection — SAR Mining", fontsize=11)
     plt.tight_layout()
-    plt.savefig(saida, dpi=150)
-    print(f"Salvo em: {saida}")
+    plt.savefig(output_path, dpi=150)
+    print(f"Saved to: {output_path}")
 
 
 # ==========================================
@@ -147,9 +151,9 @@ def salvar_resultado(t1: torch.Tensor, t2: torch.Tensor,
 if __name__ == "__main__":
     SUPPORT = Path(__file__).parent.parent.parent / "data-fusion-agent/output/support/mineracao"
 
-    # Mesmo AOI: Newman, Western Australia (lat=-21.8, lon=122.2)
-    # Mesmo satélite C13, polarização HH, ângulo ~29.3°, ascending
-    # T1: 23 Nov 2024 | T2: 26 Nov 2024 (3 dias depois)
+    # Same AOI: Newman, Western Australia (lat=-21.8, lon=122.2)
+    # Same satellite C13, HH polarization, ~29.3° incidence, ascending
+    # T1: 23 Nov 2024 | T2: 26 Nov 2024 (3 days apart)
     path_t1 = SUPPORT / "CAPELLA_C13_SP_GEO_HH_20241123120750_20241123120759.png"
     path_t2 = SUPPORT / "CAPELLA_C13_SP_GEO_HH_20241126110432_20241126110441.png"
 
@@ -158,16 +162,16 @@ if __name__ == "__main__":
 
     t1 = carregar_imagem(path_t1)
     t2 = carregar_imagem(path_t2)
-    print(f"Shape entrada: {t1.shape}")
+    print(f"Input shape: {t1.shape}")
 
     mapa_cpu = torch.abs(torch.log10(t1 + 1e-10) - torch.log10(t2 + 1e-10))
     mascara = (t1 > 0.01) & (t2 > 0.01)
     mapa_valido = mapa_cpu[mascara]
     mapa_cpu = (mapa_cpu - mapa_valido.min()) / (mapa_valido.max() - mapa_valido.min() + 1e-8)
     mapa_cpu = mapa_cpu.clamp(0, 1)
-    print(f"Shape saída: {mapa_cpu.shape}")
-    print(f"Prob. mín: {mapa_cpu.min():.4f} | máx: {mapa_cpu.max():.4f} | média: {mapa_cpu.mean():.4f}")
+    print(f"Output shape: {mapa_cpu.shape}")
+    print(f"Prob. min: {mapa_cpu.min():.4f} | max: {mapa_cpu.max():.4f} | mean: {mapa_cpu.mean():.4f}")
 
-    saida = Path(__file__).parent.parent / "output/mapa_mudanca_newman_wa.png"
-    saida.parent.mkdir(parents=True, exist_ok=True)
-    salvar_resultado(t1, t2, mapa_cpu, path_t1.stem, path_t2.stem, saida)
+    output_path = Path(__file__).parent.parent / "output/change_detection_newman_wa.png"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    save_result(t1, t2, mapa_cpu, path_t1.stem, path_t2.stem, output_path)
