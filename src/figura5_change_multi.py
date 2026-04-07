@@ -30,7 +30,7 @@ from thumbnail_to_geo import extract_geo_crop, _buscar_stac
 THUMBS = Path(__file__).parent.parent / "output/thumbs_aoi"
 
 PAIRS = [
-    # AOI: Western Australia lat=-21.8 lon=122.2 (C13, HH, ascending left ~29°)
+    # ── Mining WA — Newman (C13, HH, ascending ~29°) ─────────────────────────
     {
         "label": "Mining WA — 30 days",
         "stac_t1": "CAPELLA_C13_SP_GEO_HH_20241123120750_20241123120759",
@@ -49,7 +49,7 @@ PAIRS = [
         "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250508010500_20250508010509",
         "folder": THUMBS / "mineracao_wa_c13",
     },
-    # AOI: Tasmania lat=-43.0 lon=147.3 (C13, descending left ~39.6°)
+    # ── Urban Tasmania (C13, descending ~39.6°) ───────────────────────────────
     {
         "label": "Urban Tasmania — 3 days",
         "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250306144636_20250306144707",
@@ -62,12 +62,90 @@ PAIRS = [
         "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250315113656_20250315113727",
         "folder": THUMBS / "urbano_tasmania_c13",
     },
-    # AOI: North Carolina lat=35.3 lon=-75.5 (descending right ~42.6°)
+    # ── NC Coast ──────────────────────────────────────────────────────────────
     {
         "label": "NC Coast — ~1 month",
         "stac_t1": "CAPELLA_C10_SP_GEO_HH_20240509150102_20240509150132",
         "stac_t2": "CAPELLA_C09_SP_GEO_HH_20240605032146_20240605032214",
         "folder": THUMBS / "costa_nc",
+    },
+    # ── Volcano Hawaii (C13, HH) ──────────────────────────────────────────────
+    {
+        "label": "Volcano Hawaii — ~2 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250212132904_20250212132943",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250413061949_20250413062001",
+        "folder": THUMBS / "vulcao_hawaii",
+    },
+    {
+        "label": "Volcano Hawaii — ~4 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250413061949_20250413062001",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250823165702_20250823165715",
+        "folder": THUMBS / "vulcao_hawaii",
+    },
+    # ── Mining California (C13, HH) ───────────────────────────────────────────
+    {
+        "label": "Mining CA — ~2 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20241127064647_20241127064656",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250131073458_20250131073508",
+        "folder": THUMBS / "mineracao_ca",
+    },
+    {
+        "label": "Mining CA — ~4.5 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250131073458_20250131073508",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250616070447_20250616070457",
+        "folder": THUMBS / "mineracao_ca",
+    },
+    # ── Mining West Angelas WA (C10/C14, HH) ─────────────────────────────────
+    {
+        "label": "Mining W.Angelas WA — ~7 months",
+        "stac_t1": "CAPELLA_C10_SP_GEO_HH_20230507180103_20230507180133",
+        "stac_t2": "CAPELLA_C10_SP_GEO_HH_20231225171518_20231225171547",
+        "folder": THUMBS / "mineracao_wa_angelas",
+    },
+    {
+        "label": "Mining W.Angelas WA — 30 days",
+        "stac_t1": "CAPELLA_C14_SP_GEO_HH_20240701201753_20240701201804",
+        "stac_t2": "CAPELLA_C14_SP_GEO_HH_20240731082017_20240731082028",
+        "folder": THUMBS / "mineracao_wa_angelas",
+    },
+    # ── Military San Jose CA (C13, HH) ────────────────────────────────────────
+    {
+        "label": "Military San Jose — ~3 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250110214529_20250110214532",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250418105739_20250418105748",
+        "folder": THUMBS / "militar_san_jose",
+    },
+    {
+        "label": "Military San Jose — ~5 months",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250418105739_20250418105748",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250910071741_20250910071750",
+        "folder": THUMBS / "militar_san_jose",
+    },
+    # ── Port Barcelona (C02, HH) ──────────────────────────────────────────────
+    {
+        "label": "Port Barcelona — ~8 months",
+        "stac_t1": "CAPELLA_C02_SP_GEO_HH_20210113212333_20210113212357",
+        "stac_t2": "CAPELLA_C02_SP_GEO_HH_20210927092320_20210927092345",
+        "folder": THUMBS / "porto_barcelona",
+    },
+    {
+        "label": "Port Barcelona — ~2 months",
+        "stac_t1": "CAPELLA_C03_SP_GEO_HH_20220201211613_20220201211630",
+        "stac_t2": "CAPELLA_C03_SP_GEO_HH_20220408211608_20220408211625",
+        "folder": THUMBS / "porto_barcelona",
+    },
+    # ── SF Coast (C13, HH) ────────────────────────────────────────────────────
+    {
+        "label": "SF Coast — 9 days",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20241112185032_20241112185042",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20241121154044_20241121154053",
+        "folder": THUMBS / "costa_sf",
+    },
+    {
+        "label": "SF Coast — 3 days",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20241121154044_20241121154053",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20241124143728_20241124143738",
+        "folder": THUMBS / "costa_sf",
     },
 ]
 

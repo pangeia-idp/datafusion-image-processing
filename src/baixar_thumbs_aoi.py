@@ -21,6 +21,12 @@ AOIS = [
     ("mineracao_wa_c13",    -21.8, 122.2, 0.3),
     ("urbano_tasmania_c13", -43.0, 147.3, 0.3),
     ("costa_nc",             35.3, -75.5, 0.3),
+    ("vulcao_hawaii",        19.4, -155.3, 0.3),
+    ("mineracao_ca",         34.8, -118.1, 0.3),
+    ("mineracao_wa_angelas", -23.2, 118.8, 0.3),
+    ("militar_san_jose",     37.3, -121.9, 0.3),
+    ("porto_barcelona",      41.3,   2.2,  0.3),
+    ("costa_sf",             37.8, -122.5, 0.3),
 ]
 
 MAX_PER_AOI = 6  # thumbnails distributed over time
