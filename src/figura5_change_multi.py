@@ -228,6 +228,20 @@ def fmt_bytes(n: int) -> str:
 
 # ─── Main ────────────────────────────────────────────────────────────────────
 
+def salvar_geo_crop(geo_data: np.ndarray, stac_id: str, label: str):
+    """Salva o GEO crop como PNG em output/geo_crops/."""
+    out_dir = Path("output/geo_crops")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    slug = label.replace(" ", "_").replace("/", "-").replace("~", "").replace(".", "")
+    fname = out_dir / f"{slug}_{stac_id[24:32]}_geo_crop.png"
+    vmin = np.percentile(geo_data, 2)
+    vmax = np.percentile(geo_data, 98)
+    clipped = np.clip((geo_data - vmin) / (vmax - vmin + 1e-8), 0, 1)
+    img = Image.fromarray((clipped * 255).astype(np.uint8))
+    img.save(fname)
+    print(f"  GEO crop saved: {fname}")
+
+
 def main():
     os.makedirs("output", exist_ok=True)
 
@@ -271,6 +285,7 @@ def main():
             geo_data = crop.data
             geo_crop_bytes = geo_data.nbytes
             print(f"  OK — array {geo_data.shape}  ({fmt_bytes(geo_crop_bytes)})")
+            salvar_geo_crop(geo_data, stac_t1, label)
         except Exception as e:
             geo_data = None
             geo_crop_bytes = 0
