@@ -27,6 +27,9 @@ AOIS = [
     ("militar_san_jose",     37.3, -121.9, 0.3),
     ("porto_barcelona",      41.3,   2.2,  0.3),
     ("costa_sf",             37.8, -122.5, 0.3),
+    ("militar_gibraltar",    36.1,   -5.4, 0.3),
+    ("militar_maryland",     38.3,  -77.0, 0.3),
+    ("militar_virginia",     37.1,  -76.4, 0.3),
 ]
 
 MAX_PER_AOI = 6  # thumbnails distributed over time

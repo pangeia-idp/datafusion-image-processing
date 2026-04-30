@@ -35,6 +35,24 @@ PAIRS = [
         "stac_t2": "CAPELLA_C14_SP_GEO_HH_20240731082017_20240731082028",
         "folder": THUMBS / "mineracao_wa_angelas",
     },
+    {
+        "label": "Military_Gibraltar_3days",
+        "stac_t1": "CAPELLA_C13_SP_GEO_HH_20250923192508_20250923192516",
+        "stac_t2": "CAPELLA_C13_SP_GEO_HH_20250926182152_20250926182200",
+        "folder": THUMBS / "militar_gibraltar",
+    },
+    {
+        "label": "Military_Maryland_~2months",
+        "stac_t1": "CAPELLA_C08_SP_GEO_VV_20221207151056_20221207151120",
+        "stac_t2": "CAPELLA_C08_SP_GEO_VV_20230224151157_20230224151220",
+        "folder": THUMBS / "militar_maryland",
+    },
+    {
+        "label": "Military_Virginia_8months",
+        "stac_t1": "CAPELLA_C02_SP_GEO_HH_20210904014246_20210904014312",
+        "stac_t2": "CAPELLA_C02_SP_GEO_HH_20220518133200_20220518133225",
+        "folder": THUMBS / "militar_virginia",
+    },
 ]
 
 
@@ -43,7 +61,7 @@ def salvar(geo_data: np.ndarray, path: Path):
     vmax = np.percentile(geo_data, 98)
     clipped = np.clip((geo_data - vmin) / (vmax - vmin + 1e-8), 0, 1)
     img = Image.fromarray((clipped * 255).astype(np.uint8))
-    img.save(path)
+    img.save(path, dpi=(300, 300))
     print(f"  saved: {path}")
 
 

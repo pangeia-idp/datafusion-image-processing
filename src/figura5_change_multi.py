@@ -238,7 +238,7 @@ def salvar_geo_crop(geo_data: np.ndarray, stac_id: str, label: str):
     vmax = np.percentile(geo_data, 98)
     clipped = np.clip((geo_data - vmin) / (vmax - vmin + 1e-8), 0, 1)
     img = Image.fromarray((clipped * 255).astype(np.uint8))
-    img.save(fname)
+    img.save(fname, dpi=(300, 300))
     print(f"  GEO crop saved: {fname}")
 
 

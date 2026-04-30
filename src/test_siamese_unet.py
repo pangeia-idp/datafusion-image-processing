@@ -141,7 +141,7 @@ def save_result(t1: torch.Tensor, t2: torch.Tensor,
 
     plt.suptitle("Log-Ratio Change Detection — SAR Mining", fontsize=11)
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150)
+    plt.savefig(output_path, dpi=300)
     print(f"Saved to: {output_path}")
 
 
